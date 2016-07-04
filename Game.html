@@ -29,8 +29,17 @@
             width: 302px;
             border-style: solid;
         }
+
+        .selected {
+            border-color: black;
+            border-width: 2px;
+            border-style: solid;
+            width: 26px;
+            height: 26px;
+        }
     </style>
 
+    <script src="./js/jquery-2.2.4.min.js"></script>
 
 </head>
 <body>
@@ -144,5 +153,20 @@
     <span class="gem gem-green"></span>
     <span class="gem gem-blue"></span>
 </div>
+
+<script>
+    var selectedGem = this;
+
+    $( ".gem" ).click(function() {
+
+        if (selectedGem === this) {
+            $(this).removeClass("selected");
+            selectedGem = null;
+        } else {
+            $(this).addClass("selected");
+            selectedGem = this;
+        }
+    })
+</script>
 </body>
 </html>
