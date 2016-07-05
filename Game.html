@@ -155,16 +155,25 @@
 </div>
 
 <script>
-    var selectedGem = this;
+    var selectedGem = null;
 
-    $( ".gem" ).click(function() {
+    $(".gem").click(function () {
 
         if (selectedGem === this) {
             $(this).removeClass("selected");
             selectedGem = null;
         } else {
-            $(this).addClass("selected");
-            selectedGem = this;
+            if (selectedGem !== null) {
+                var thisClassName = $(this).attr("class");
+                $(this).attr("class", $(selectedGem).attr("class"));
+                $(selectedGem).attr("class", thisClassName);
+
+                selectedGem = null;
+                $(this).removeClass("selected");
+            } else {
+                $(this).addClass("selected");
+                selectedGem = this;
+            }
         }
     })
 </script>
