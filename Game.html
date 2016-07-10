@@ -157,22 +157,50 @@
 <script>
     var selectedGem = null;
 
+    function swapClassNames(lefElement, rightElement) {
+        var thisClassName = $(lefElement).attr("class");
+        $(lefElement).attr("class", $(rightElement).attr("class"));
+        $(rightElement).attr("class", thisClassName);
+    }
+
+    function deselectGem(gem) {
+        $(gem).removeClass("selected");
+        selectedGem = null;
+    }
+    function isSelected(gem) {
+        return selectedGem === gem;
+    }
+    function someGemIsSelected() {
+        return selectedGem !== null;
+    }
+    function swapGemWithSelected(gem) {
+        swapClassNames(gem, selectedGem);
+        deselectGem(gem);
+    }
+    function selectGem(gem) {
+        $(gem).addClass("selected");
+        selectedGem = gem;
+    }
     $(".gem").click(function () {
+        var clickedGem = this;
 
-        if (selectedGem === this) {
-            $(this).removeClass("selected");
-            selectedGem = null;
+        if (isSelected(clickedGem)) {
+            deselectGem(clickedGem);
         } else {
-            if (selectedGem !== null) {
-                var thisClassName = $(this).attr("class");
-                $(this).attr("class", $(selectedGem).attr("class"));
-                $(selectedGem).attr("class", thisClassName);
+            if (someGemIsSelected()) {
+                var clickedGemColumn = ($(clickedGem).offset().left - 11) / 34;
+                var clickedGemRow = ($(clickedGem).offset().top - 11) / 34;
+                var selectedGemColumn = ($(selectedGem).offset().left - 11) / 34;
+                var selectedGemRow = ($(selectedGem).offset().top - 11) / 34;
 
-                selectedGem = null;
-                $(this).removeClass("selected");
+                if (Math.abs(clickedGemColumn - selectedGemColumn) + Math.abs(clickedGemRow - selectedGemRow) === 1 ) {
+                    swapGemWithSelected(clickedGem);
+                } else {
+                   deselectGem(selectedGem);
+                }
+
             } else {
-                $(this).addClass("selected");
-                selectedGem = this;
+                selectGem(clickedGem);
             }
         }
     })
