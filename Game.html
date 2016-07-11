@@ -24,6 +24,10 @@
             background-color: blue;
         }
 
+        .gem.gem-destroyed {
+            background-color: white;
+        }
+
         .game-field {
             height: 302px;
             width: 302px;
@@ -46,8 +50,40 @@
 
 <div class="game-field">
     <span class="gem gem-red"></span>
+    <span class="gem gem-blue"></span>
+    <span class="gem gem-green"></span>
+
+    <span class="gem gem-blue"></span>
+    <span class="gem gem-red"></span>
+    <span class="gem gem-green"></span>
+
+    <span class="gem gem-green"></span>
+    <span class="gem gem-red"></span>
+    <span class="gem gem-blue"></span>
+
+    <span class="gem gem-blue"></span>
+    <span class="gem gem-green"></span>
+    <span class="gem gem-red"></span>
+
+    <span class="gem gem-red"></span>
     <span class="gem gem-green"></span>
     <span class="gem gem-blue"></span>
+
+    <span class="gem gem-green"></span>
+    <span class="gem gem-red"></span>
+    <span class="gem gem-blue"></span>
+
+    <span class="gem gem-green"></span>
+    <span class="gem gem-blue"></span>
+    <span class="gem gem-red"></span>
+
+    <span class="gem gem-blue"></span>
+    <span class="gem gem-green"></span>
+    <span class="gem gem-red"></span>
+
+    <span class="gem gem-red"></span>
+    <span class="gem gem-blue"></span>
+    <span class="gem gem-green"></span>
 
     <span class="gem gem-red"></span>
     <span class="gem gem-green"></span>
@@ -57,8 +93,12 @@
     <span class="gem gem-green"></span>
     <span class="gem gem-blue"></span>
 
-    <span class="gem gem-red"></span>
     <span class="gem gem-green"></span>
+    <span class="gem gem-blue"></span>
+    <span class="gem gem-red"></span>
+
+    <span class="gem gem-green"></span>
+    <span class="gem gem-red"></span>
     <span class="gem gem-blue"></span>
 
     <span class="gem gem-red"></span>
@@ -66,7 +106,11 @@
     <span class="gem gem-blue"></span>
 
     <span class="gem gem-red"></span>
+    <span class="gem gem-blue"></span>
     <span class="gem gem-green"></span>
+
+    <span class="gem gem-green"></span>
+    <span class="gem gem-red"></span>
     <span class="gem gem-blue"></span>
 
     <span class="gem gem-red"></span>
@@ -74,52 +118,12 @@
     <span class="gem gem-blue"></span>
 
     <span class="gem gem-red"></span>
-    <span class="gem gem-green"></span>
     <span class="gem gem-blue"></span>
+    <span class="gem gem-green"></span>
 
     <span class="gem gem-red"></span>
-    <span class="gem gem-green"></span>
     <span class="gem gem-blue"></span>
-
-    <span class="gem gem-red"></span>
     <span class="gem gem-green"></span>
-    <span class="gem gem-blue"></span>
-
-    <span class="gem gem-red"></span>
-    <span class="gem gem-green"></span>
-    <span class="gem gem-blue"></span>
-
-    <span class="gem gem-red"></span>
-    <span class="gem gem-green"></span>
-    <span class="gem gem-blue"></span>
-
-    <span class="gem gem-red"></span>
-    <span class="gem gem-green"></span>
-    <span class="gem gem-blue"></span>
-
-    <span class="gem gem-red"></span>
-    <span class="gem gem-green"></span>
-    <span class="gem gem-blue"></span>
-
-    <span class="gem gem-red"></span>
-    <span class="gem gem-green"></span>
-    <span class="gem gem-blue"></span>
-
-    <span class="gem gem-red"></span>
-    <span class="gem gem-green"></span>
-    <span class="gem gem-blue"></span>
-
-    <span class="gem gem-red"></span>
-    <span class="gem gem-green"></span>
-    <span class="gem gem-blue"></span>
-
-    <span class="gem gem-red"></span>
-    <span class="gem gem-green"></span>
-    <span class="gem gem-blue"></span>
-
-    <span class="gem gem-red"></span>
-    <span class="gem gem-green"></span>
-    <span class="gem gem-blue"></span>
 
     <span class="gem gem-red"></span>
     <span class="gem gem-green"></span>
@@ -155,6 +159,8 @@
 </div>
 
 <script>
+
+    const NEIGHBOUR_DISTANCE = 1;
     var selectedGem = null;
 
     function swapClassNames(lefElement, rightElement) {
@@ -167,20 +173,50 @@
         $(gem).removeClass("selected");
         selectedGem = null;
     }
+
     function isSelected(gem) {
         return selectedGem === gem;
     }
+
     function someGemIsSelected() {
         return selectedGem !== null;
     }
+
     function swapGemWithSelected(gem) {
         swapClassNames(gem, selectedGem);
         deselectGem(gem);
     }
+
     function selectGem(gem) {
         $(gem).addClass("selected");
         selectedGem = gem;
     }
+
+    function getGemCoordinates(gem) {
+        return {
+            col: ($(gem).offset().left - 11) / 34,
+            row: ($(gem).offset().top - 11) / 34
+        };
+    }
+
+    function columnDistance(coordinates, otherCoordinates) {
+        return Math.abs(coordinates.col - otherCoordinates.col);
+    }
+
+    function rowDistance(coordinates, otherCoordinates) {
+        return Math.abs(coordinates.row - otherCoordinates.row);
+    }
+
+    function getDistance(gem, otherGem) {
+        var coordinates = getGemCoordinates(gem);
+        var otherCoordinates = getGemCoordinates(otherGem);
+        return columnDistance(coordinates, otherCoordinates) + rowDistance(coordinates, otherCoordinates);
+    }
+
+    function areNeighbours(gem, otherGem) {
+        return getDistance(gem, otherGem) === NEIGHBOUR_DISTANCE;
+    }
+
     $(".gem").click(function () {
         var clickedGem = this;
 
@@ -188,15 +224,70 @@
             deselectGem(clickedGem);
         } else {
             if (someGemIsSelected()) {
-                var clickedGemColumn = ($(clickedGem).offset().left - 11) / 34;
-                var clickedGemRow = ($(clickedGem).offset().top - 11) / 34;
-                var selectedGemColumn = ($(selectedGem).offset().left - 11) / 34;
-                var selectedGemRow = ($(selectedGem).offset().top - 11) / 34;
+                if (areNeighbours(clickedGem, selectedGem)) {
+                    var selectedGemBeforeSwap = selectedGem;
 
-                if (Math.abs(clickedGemColumn - selectedGemColumn) + Math.abs(clickedGemRow - selectedGemRow) === 1 ) {
                     swapGemWithSelected(clickedGem);
+
+                    var table = [];
+
+                    $(".gem").each(function () {
+                        var gem = $(this);
+                        var coordinates = getGemCoordinates(gem);
+
+                        table[coordinates.row] = table[coordinates.row] || [];
+                        table[coordinates.row][coordinates.col] = gem;
+                    });
+
+                    var row, col, firstGem, secondGem, thirdGem, matching;
+
+                    matching = false;
+
+                    for (row = 0; row < table.length; row++) {
+                        for (col = 0; col < table[row].length - 2; col++) {
+                            firstGem = $(table[row][col]);
+                            secondGem = $(table[row][col + 1]);
+                            thirdGem = $(table[row][col + 2]);
+
+                            if (firstGem.attr("class") === secondGem.attr("class") &&
+                                    firstGem.attr("class") === thirdGem.attr("class") &&
+                                    firstGem.attr("class") &&
+                                    !firstGem.hasClass("gem-destroyed")) {
+                                console.log("coord: ", row, col, "gem: ", firstGem);
+                                firstGem.addClass("gem-destroyed");
+                                secondGem.addClass("gem-destroyed");
+                                thirdGem.addClass("gem-destroyed");
+                                matching = true;
+                            }
+                        }
+                    }
+
+                    for (row = 0; row < table.length - 2; row++) {
+                        for (col = 0; col < table[row].length; col++) {
+                            firstGem = $(table[row][col]);
+                            secondGem = $(table[row + 1][col]);
+                            thirdGem = $(table[row + 2][col]);
+
+                            if (firstGem.attr("class") === secondGem.attr("class") &&
+                                    firstGem.attr("class") === thirdGem.attr("class") &&
+                                    firstGem.attr("class") &&
+                                    !firstGem.hasClass("gem-destroyed")) {
+                                console.log("coord: ", row, col, "gem: ", firstGem);
+                                firstGem.addClass("gem-destroyed");
+                                secondGem.addClass("gem-destroyed");
+                                thirdGem.addClass("gem-destroyed");
+                                matching = true;
+                            }
+                        }
+                    }
+
+                    if (!matching) {
+                        swapClassNames(clickedGem, selectedGemBeforeSwap);
+                    }
+
+
                 } else {
-                   deselectGem(selectedGem);
+                    deselectGem(selectedGem);
                 }
 
             } else {
