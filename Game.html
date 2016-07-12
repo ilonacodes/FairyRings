@@ -217,6 +217,24 @@
         return getDistance(gem, otherGem) === NEIGHBOUR_DISTANCE;
     }
 
+    function putGemIntoTableByCoordinates(table, row, col, gem) {
+        table[row] = table[row] || [];
+        table[row][col] = gem;
+    }
+
+    function putGemIntoTable(table, gem) {
+        var coordinates = getGemCoordinates(gem);
+
+        putGemIntoTableByCoordinates(table, coordinates.row, coordinates.col, gem);
+    }
+    function getGemsCoordinateLookupTable() {
+        var table = [];
+
+        $(".gem").each(function () {
+            putGemIntoTable(table, $(this));
+        });
+        return table;
+    }
     $(".gem").click(function () {
         var clickedGem = this;
 
@@ -229,31 +247,22 @@
 
                     swapGemWithSelected(clickedGem);
 
-                    var table = [];
-
-                    $(".gem").each(function () {
-                        var gem = $(this);
-                        var coordinates = getGemCoordinates(gem);
-
-                        table[coordinates.row] = table[coordinates.row] || [];
-                        table[coordinates.row][coordinates.col] = gem;
-                    });
+                    var lookupTable = getGemsCoordinateLookupTable();
 
                     var row, col, firstGem, secondGem, thirdGem, matching;
 
                     matching = false;
 
-                    for (row = 0; row < table.length; row++) {
-                        for (col = 0; col < table[row].length - 2; col++) {
-                            firstGem = $(table[row][col]);
-                            secondGem = $(table[row][col + 1]);
-                            thirdGem = $(table[row][col + 2]);
+                    for (row = 0; row < lookupTable.length; row++) {
+                        for (col = 0; col < lookupTable[row].length - 2; col++) {
+                            firstGem = $(lookupTable[row][col]);
+                            secondGem = $(lookupTable[row][col + 1]);
+                            thirdGem = $(lookupTable[row][col + 2]);
 
                             if (firstGem.attr("class") === secondGem.attr("class") &&
                                     firstGem.attr("class") === thirdGem.attr("class") &&
                                     firstGem.attr("class") &&
                                     !firstGem.hasClass("gem-destroyed")) {
-                                console.log("coord: ", row, col, "gem: ", firstGem);
                                 firstGem.addClass("gem-destroyed");
                                 secondGem.addClass("gem-destroyed");
                                 thirdGem.addClass("gem-destroyed");
@@ -262,17 +271,16 @@
                         }
                     }
 
-                    for (row = 0; row < table.length - 2; row++) {
-                        for (col = 0; col < table[row].length; col++) {
-                            firstGem = $(table[row][col]);
-                            secondGem = $(table[row + 1][col]);
-                            thirdGem = $(table[row + 2][col]);
+                    for (row = 0; row < lookupTable.length - 2; row++) {
+                        for (col = 0; col < lookupTable[row].length; col++) {
+                            firstGem = $(lookupTable[row][col]);
+                            secondGem = $(lookupTable[row + 1][col]);
+                            thirdGem = $(lookupTable[row + 2][col]);
 
                             if (firstGem.attr("class") === secondGem.attr("class") &&
                                     firstGem.attr("class") === thirdGem.attr("class") &&
                                     firstGem.attr("class") &&
                                     !firstGem.hasClass("gem-destroyed")) {
-                                console.log("coord: ", row, col, "gem: ", firstGem);
                                 firstGem.addClass("gem-destroyed");
                                 secondGem.addClass("gem-destroyed");
                                 thirdGem.addClass("gem-destroyed");
