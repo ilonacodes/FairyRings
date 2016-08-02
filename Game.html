@@ -58,7 +58,7 @@
     <span class="gem gem-green"></span>
 
     <span class="gem gem-green"></span>
-    <span class="gem gem-red"></span>
+    <span class="gem gem-green"></span>
     <span class="gem gem-blue"></span>
 
     <span class="gem gem-blue"></span>
@@ -83,7 +83,7 @@
 
     <span class="gem gem-red"></span>
     <span class="gem gem-blue"></span>
-    <span class="gem gem-green"></span>
+    <span class="gem gem-red"></span>
 
     <span class="gem gem-red"></span>
     <span class="gem gem-green"></span>
@@ -249,9 +249,30 @@
 
                     var lookupTable = getGemsCoordinateLookupTable();
 
-                    var row, col, firstGem, secondGem, thirdGem, matching;
+                    var row, col, firstGem, secondGem, thirdGem, fourthGem, matching;
 
                     matching = false;
+
+                    for (row = 0; row < lookupTable.length; row++) {
+                        for (col = 0; col < lookupTable[row].length - 3; col++) {
+                            firstGem = $(lookupTable[row][col]);
+                            secondGem = $(lookupTable[row][col + 1]);
+                            thirdGem = $(lookupTable[row][col + 2]);
+                            fourthGem = $(lookupTable[row][col + 3]);
+
+                            if (firstGem.attr("class") === secondGem.attr("class") &&
+                                    firstGem.attr("class") === thirdGem.attr("class") &&
+                                    firstGem.attr("class") === fourthGem.attr("class") &&
+                                    firstGem.attr("class") &&
+                                    !firstGem.hasClass("gem-destroyed")) {
+                                firstGem.addClass("gem-destroyed");
+                                secondGem.addClass("gem-destroyed");
+                                thirdGem.addClass("gem-destroyed");
+                                fourthGem.addClass("gem-destroyed");
+                                matching = true;
+                            }
+                        }
+                    }
 
                     for (row = 0; row < lookupTable.length; row++) {
                         for (col = 0; col < lookupTable[row].length - 2; col++) {
@@ -266,6 +287,28 @@
                                 firstGem.addClass("gem-destroyed");
                                 secondGem.addClass("gem-destroyed");
                                 thirdGem.addClass("gem-destroyed");
+                                matching = true;
+                            }
+                        }
+                    }
+
+                    for (row = 0; row < lookupTable.length - 3; row++) {
+                        for (col = 0; col < lookupTable[row].length; col++) {
+                            firstGem = $(lookupTable[row][col]);
+                            secondGem = $(lookupTable[row + 1][col]);
+                            thirdGem = $(lookupTable[row + 2][col]);
+                            fourthGem = $(lookupTable[row + 3][col])
+
+
+                            if (firstGem.attr("class") === secondGem.attr("class") &&
+                                    firstGem.attr("class") === thirdGem.attr("class") &&
+                                    firstGem.attr("class") === fourthGem.attr("class") &&
+                                    firstGem.attr("class") &&
+                                    !firstGem.hasClass("gem-destroyed")) {
+                                firstGem.addClass("gem-destroyed");
+                                secondGem.addClass("gem-destroyed");
+                                thirdGem.addClass("gem-destroyed");
+                                fourthGem.addClass("gem-destroyed");
                                 matching = true;
                             }
                         }
