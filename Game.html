@@ -235,6 +235,59 @@
         });
         return table;
     }
+
+    function getGem(lookupTable, row, col) {
+        var lookupRow = lookupTable[row];
+
+        if (!lookupRow) {
+            return $(null);
+        }
+
+        return $(lookupRow[col]);
+    }
+
+    function getGemsWithPattern(lookupTable, row, col, rowOffsets, colOffsets) {
+        var gems = [];
+
+        for (var index = 0; index < rowOffsets.length; index++) {
+            gems.push(getGem(lookupTable, row + rowOffsets[index], col + colOffsets[index]));
+        }
+
+        return gems;
+    }
+
+    function destroyGemsWithPattern(lookupTable, matching, rowOffsets, colOffsets) {
+        for (var row = 0; row < lookupTable.length; row++) {
+            for (var col = 0; col < lookupTable[row].length; col++) {
+                var firstGem = getGem(lookupTable, row + rowOffsets[0], col + colOffsets[0]);
+
+                if (!firstGem.attr("class") || firstGem.hasClass("gem-destroyed")) {
+                    continue;
+                }
+
+                var gems = getGemsWithPattern(lookupTable, row, col, rowOffsets, colOffsets);
+
+                var localMatching = true;
+
+                for (var index2 = 0; index2 < rowOffsets.length; index2++) {
+                    if (firstGem.attr("class") !== gems[index2].attr("class")) {
+                        localMatching = false;
+                        break;
+                    }
+                }
+
+                if (localMatching) {
+                    matching = true;
+                    for (var index3 = 0; index3 < gems.length; index3++) {
+                        gems[index3].addClass("gem-destroyed");
+                    }
+                }
+            }
+        }
+
+        return matching;
+    }
+
     $(".gem").click(function () {
         var clickedGem = this;
 
@@ -249,88 +302,13 @@
 
                     var lookupTable = getGemsCoordinateLookupTable();
 
-                    var row, col, firstGem, secondGem, thirdGem, fourthGem, matching;
+                    var matching = false;
 
-                    matching = false;
+                    matching = destroyGemsWithPattern(lookupTable, matching, [0, 1, 2, 3], [0, 0, 0, 0]);
+                    matching = destroyGemsWithPattern(lookupTable, matching, [0, 0, 0, 0], [0, 1, 2, 3]);
 
-                    for (row = 0; row < lookupTable.length; row++) {
-                        for (col = 0; col < lookupTable[row].length - 3; col++) {
-                            firstGem = $(lookupTable[row][col]);
-                            secondGem = $(lookupTable[row][col + 1]);
-                            thirdGem = $(lookupTable[row][col + 2]);
-                            fourthGem = $(lookupTable[row][col + 3]);
-
-                            if (firstGem.attr("class") === secondGem.attr("class") &&
-                                    firstGem.attr("class") === thirdGem.attr("class") &&
-                                    firstGem.attr("class") === fourthGem.attr("class") &&
-                                    firstGem.attr("class") &&
-                                    !firstGem.hasClass("gem-destroyed")) {
-                                firstGem.addClass("gem-destroyed");
-                                secondGem.addClass("gem-destroyed");
-                                thirdGem.addClass("gem-destroyed");
-                                fourthGem.addClass("gem-destroyed");
-                                matching = true;
-                            }
-                        }
-                    }
-
-                    for (row = 0; row < lookupTable.length; row++) {
-                        for (col = 0; col < lookupTable[row].length - 2; col++) {
-                            firstGem = $(lookupTable[row][col]);
-                            secondGem = $(lookupTable[row][col + 1]);
-                            thirdGem = $(lookupTable[row][col + 2]);
-
-                            if (firstGem.attr("class") === secondGem.attr("class") &&
-                                    firstGem.attr("class") === thirdGem.attr("class") &&
-                                    firstGem.attr("class") &&
-                                    !firstGem.hasClass("gem-destroyed")) {
-                                firstGem.addClass("gem-destroyed");
-                                secondGem.addClass("gem-destroyed");
-                                thirdGem.addClass("gem-destroyed");
-                                matching = true;
-                            }
-                        }
-                    }
-
-                    for (row = 0; row < lookupTable.length - 3; row++) {
-                        for (col = 0; col < lookupTable[row].length; col++) {
-                            firstGem = $(lookupTable[row][col]);
-                            secondGem = $(lookupTable[row + 1][col]);
-                            thirdGem = $(lookupTable[row + 2][col]);
-                            fourthGem = $(lookupTable[row + 3][col])
-
-
-                            if (firstGem.attr("class") === secondGem.attr("class") &&
-                                    firstGem.attr("class") === thirdGem.attr("class") &&
-                                    firstGem.attr("class") === fourthGem.attr("class") &&
-                                    firstGem.attr("class") &&
-                                    !firstGem.hasClass("gem-destroyed")) {
-                                firstGem.addClass("gem-destroyed");
-                                secondGem.addClass("gem-destroyed");
-                                thirdGem.addClass("gem-destroyed");
-                                fourthGem.addClass("gem-destroyed");
-                                matching = true;
-                            }
-                        }
-                    }
-
-                    for (row = 0; row < lookupTable.length - 2; row++) {
-                        for (col = 0; col < lookupTable[row].length; col++) {
-                            firstGem = $(lookupTable[row][col]);
-                            secondGem = $(lookupTable[row + 1][col]);
-                            thirdGem = $(lookupTable[row + 2][col]);
-
-                            if (firstGem.attr("class") === secondGem.attr("class") &&
-                                    firstGem.attr("class") === thirdGem.attr("class") &&
-                                    firstGem.attr("class") &&
-                                    !firstGem.hasClass("gem-destroyed")) {
-                                firstGem.addClass("gem-destroyed");
-                                secondGem.addClass("gem-destroyed");
-                                thirdGem.addClass("gem-destroyed");
-                                matching = true;
-                            }
-                        }
-                    }
+                    matching = destroyGemsWithPattern(lookupTable, matching, [0, 1, 2], [0, 0, 0]);
+                    matching = destroyGemsWithPattern(lookupTable, matching, [0, 0, 0], [0, 1, 2]);
 
                     if (!matching) {
                         swapClassNames(clickedGem, selectedGemBeforeSwap);
