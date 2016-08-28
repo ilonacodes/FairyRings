@@ -256,31 +256,48 @@
         return gems;
     }
 
+    function thereIsNoGem(gem) {
+        return !gem.attr("class");
+    }
+
+    function isDestroyedGem(gem) {
+        return gem.hasClass("gem-destroyed");
+    }
+
+    function allGemsHaveSameClass(gems) {
+        var firstGem = gems[0];
+
+        if (thereIsNoGem(firstGem) || isDestroyedGem(firstGem)) {
+            return false;
+        }
+
+        for (var index = 1; index < gems.length; index++) {
+            if (firstGem.attr("class") !== gems[index].attr("class")) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    function destroyGem(gem) {
+        gem.addClass("gem-destroyed");
+    }
+
+    function destroyGems(gems) {
+        for (var index = 0; index < gems.length; index++) {
+            destroyGem(gems[index]);
+        }
+    }
+
     function destroyGemsWithPattern(lookupTable, matching, rowOffsets, colOffsets) {
         for (var row = 0; row < lookupTable.length; row++) {
             for (var col = 0; col < lookupTable[row].length; col++) {
-                var firstGem = getGem(lookupTable, row + rowOffsets[0], col + colOffsets[0]);
-
-                if (!firstGem.attr("class") || firstGem.hasClass("gem-destroyed")) {
-                    continue;
-                }
-
                 var gems = getGemsWithPattern(lookupTable, row, col, rowOffsets, colOffsets);
 
-                var localMatching = true;
-
-                for (var index2 = 0; index2 < rowOffsets.length; index2++) {
-                    if (firstGem.attr("class") !== gems[index2].attr("class")) {
-                        localMatching = false;
-                        break;
-                    }
-                }
-
-                if (localMatching) {
+                if (allGemsHaveSameClass(gems)) {
                     matching = true;
-                    for (var index3 = 0; index3 < gems.length; index3++) {
-                        gems[index3].addClass("gem-destroyed");
-                    }
+                    destroyGems(gems);
                 }
             }
         }
@@ -297,7 +314,7 @@
             if (someGemIsSelected()) {
                 if (areNeighbours(clickedGem, selectedGem)) {
                     var selectedGemBeforeSwap = selectedGem;
-
+ 
                     swapGemWithSelected(clickedGem);
 
                     var lookupTable = getGemsCoordinateLookupTable();
@@ -313,7 +330,6 @@
                     if (!matching) {
                         swapClassNames(clickedGem, selectedGemBeforeSwap);
                     }
-
 
                 } else {
                     deselectGem(selectedGem);
