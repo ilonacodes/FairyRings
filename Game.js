@@ -174,7 +174,7 @@ $gems.click(function () {
                 matching = destroyGemsWithPattern(lookupTable, matching, [0, 1, 2, 2, 2], [0, 0, 0, 1, 2], "L shape");
                 matching = destroyGemsWithPattern(lookupTable, matching, [0, 1, 2, 0, 0], [0, 0, 0, 1, 2], "L shape 90deg clockwise");
                 matching = destroyGemsWithPattern(lookupTable, matching, [0, 1, 2, 2, 2], [2, 2, 0, 1, 2], "L shape 90deg counter-clockwise");
-                matching = destroyGemsWithPattern(lookupTable, matching, [0, 1, 2, 2, 2], [0, 0, 0, 1, 2], "L shape 180deg");
+                matching = destroyGemsWithPattern(lookupTable, matching, [0, 0, 0, 1, 2], [0, 1, 2, 2, 2], "L shape 180deg");
 
                 matching = destroyGemsWithPattern(lookupTable, matching, [0, 1, 2, 3, 4], [0, 0, 0, 0, 0], "5 in column");
                 matching = destroyGemsWithPattern(lookupTable, matching, [0, 0, 0, 0, 0], [0, 1, 2, 3, 4], "5 in row");
