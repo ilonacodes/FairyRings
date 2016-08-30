@@ -1,0 +1,41 @@
+
+.gem {
+    height: 30px;
+    width: 30px;
+    border-radius: 10px;
+    display: inline-block;
+}
+
+.gem.gem-red {
+    background-color: red;
+}
+
+.gem.gem-green {
+    background-color: green;
+}
+
+.gem.gem-yellow {
+    background-color: orange;
+}
+
+.gem.gem-blue {
+    background-color: blue;
+}
+
+.gem.gem-destroyed {
+    background-color: white;
+}
+
+.game-field {
+    height: 302px;
+    width: 302px;
+    border-style: solid;
+}
+
+.selected {
+    border-color: black;
+    border-width: 2px;
+    border-style: solid;
+    width: 26px;
+    height: 26px;
+}
