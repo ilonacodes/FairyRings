@@ -170,8 +170,44 @@
 
 <script>
     $gems.each(function() {
-        $(this).addClass("gem-" + generateRandomColor());
+        $(this).addClass("gem-destroyed");
     });
+
+    var lookupTable = getGemsCoordinateLookupTable();
+    getGem(lookupTable, 0, 1).removeClass("gem-destroyed").addClass("gem-green");
+    getGem(lookupTable, 1, 0).removeClass("gem-destroyed").addClass("gem-green");
+    getGem(lookupTable, 1, 2).removeClass("gem-destroyed").addClass("gem-green");
+    getGem(lookupTable, 2, 1).removeClass("gem-destroyed").addClass("gem-green");
+    getGem(lookupTable, 3, 1).removeClass("gem-destroyed").addClass("gem-green");
+
+    getGem(lookupTable, 1, 4).removeClass("gem-destroyed").addClass("gem-green");
+    getGem(lookupTable, 1, 5).removeClass("gem-destroyed").addClass("gem-green");
+    getGem(lookupTable, 0, 6).removeClass("gem-destroyed").addClass("gem-green");
+    getGem(lookupTable, 2, 6).removeClass("gem-destroyed").addClass("gem-green");
+    getGem(lookupTable, 1, 7).removeClass("gem-destroyed").addClass("gem-green");
+
+    getGem(lookupTable, 6, 0).removeClass("gem-destroyed").addClass("gem-green");
+    getGem(lookupTable, 5, 1).removeClass("gem-destroyed").addClass("gem-green");
+    getGem(lookupTable, 7, 1).removeClass("gem-destroyed").addClass("gem-green");
+    getGem(lookupTable, 6, 2).removeClass("gem-destroyed").addClass("gem-green");
+    getGem(lookupTable, 6, 3).removeClass("gem-destroyed").addClass("gem-green");
+
+    getGem(lookupTable, 5, 7).removeClass("gem-destroyed").addClass("gem-green");
+    getGem(lookupTable, 6, 7).removeClass("gem-destroyed").addClass("gem-green");
+    getGem(lookupTable, 7, 6).removeClass("gem-destroyed").addClass("gem-green");
+    getGem(lookupTable, 7, 8).removeClass("gem-destroyed").addClass("gem-green");
+    getGem(lookupTable, 8, 7).removeClass("gem-destroyed").addClass("gem-green");
+
+
+
+
+
+
+
+
+
+
+
 </script>
 </body>
 </html>
