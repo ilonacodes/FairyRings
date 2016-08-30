@@ -167,47 +167,43 @@
 </div>
 
 <script src="Game.js"></script>
+<script src="TestHelper.js"></script>
 
 <script>
-    $gems.each(function() {
-        $(this).addClass("gem-destroyed");
-    });
+    function test() {
+        destroyAllGems();
 
-    var lookupTable = getGemsCoordinateLookupTable();
-    getGem(lookupTable, 0, 1).removeClass("gem-destroyed").addClass("gem-green");
-    getGem(lookupTable, 1, 0).removeClass("gem-destroyed").addClass("gem-green");
-    getGem(lookupTable, 1, 2).removeClass("gem-destroyed").addClass("gem-green");
-    getGem(lookupTable, 2, 1).removeClass("gem-destroyed").addClass("gem-green");
-    getGem(lookupTable, 3, 1).removeClass("gem-destroyed").addClass("gem-green");
+        setGemColor(0, 1, "green");
+        setGemColor(1, 0, "green");
+        setGemColor(1, 2, "green");
+        setGemColor(2, 1, "green");
+        setGemColor(3, 1, "green");
 
-    getGem(lookupTable, 1, 4).removeClass("gem-destroyed").addClass("gem-green");
-    getGem(lookupTable, 1, 5).removeClass("gem-destroyed").addClass("gem-green");
-    getGem(lookupTable, 0, 6).removeClass("gem-destroyed").addClass("gem-green");
-    getGem(lookupTable, 2, 6).removeClass("gem-destroyed").addClass("gem-green");
-    getGem(lookupTable, 1, 7).removeClass("gem-destroyed").addClass("gem-green");
+        setGemColor(1, 4, "red");
+        setGemColor(1, 5, "red");
+        setGemColor(0, 6, "red");
+        setGemColor(2, 6, "red");
+        setGemColor(1, 7, "red");
 
-    getGem(lookupTable, 6, 0).removeClass("gem-destroyed").addClass("gem-green");
-    getGem(lookupTable, 5, 1).removeClass("gem-destroyed").addClass("gem-green");
-    getGem(lookupTable, 7, 1).removeClass("gem-destroyed").addClass("gem-green");
-    getGem(lookupTable, 6, 2).removeClass("gem-destroyed").addClass("gem-green");
-    getGem(lookupTable, 6, 3).removeClass("gem-destroyed").addClass("gem-green");
+        setGemColor(6, 0, "yellow");
+        setGemColor(5, 1, "yellow");
+        setGemColor(7, 1, "yellow");
+        setGemColor(6, 2, "yellow");
+        setGemColor(6, 3, "yellow");
 
-    getGem(lookupTable, 5, 7).removeClass("gem-destroyed").addClass("gem-green");
-    getGem(lookupTable, 6, 7).removeClass("gem-destroyed").addClass("gem-green");
-    getGem(lookupTable, 7, 6).removeClass("gem-destroyed").addClass("gem-green");
-    getGem(lookupTable, 7, 8).removeClass("gem-destroyed").addClass("gem-green");
-    getGem(lookupTable, 8, 7).removeClass("gem-destroyed").addClass("gem-green");
+        setGemColor(5, 7, "blue");
+        setGemColor(6, 7, "blue");
+        setGemColor(7, 6, "blue");
+        setGemColor(7, 8, "blue");
+        setGemColor(8, 7, "blue");
 
+        step(swapGems(0, 1, 1, 1));
+        step(swapGems(1, 7, 1, 6));
+        step(swapGems(6, 0, 6, 1));
+        step(swapGems(8, 7, 7, 7));
+    }
 
-
-
-
-
-
-
-
-
-
+    test();
 </script>
 </body>
 </html>
