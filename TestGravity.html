@@ -126,13 +126,19 @@
 </div>
 
 <script src="Game.js"></script>
+<script src="TestHelper.js"></script>
 
 <script>
-    $gems.each(function() {
-        $(this).addClass("gem-" + generateRandomColor());
-    });
+    function test() {
+        enableGravity();
 
-    enableGravity();
+        destroyAllGems();
+
+        setGemColor(1, 5, "red");
+        setGemColor(2, 5, "red");
+    }
+
+    test();
 </script>
 </body>
 </html>

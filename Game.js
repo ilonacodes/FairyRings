@@ -1,9 +1,9 @@
 const NEIGHBOUR_DISTANCE = 1;
 var selectedGem = null;
 
-function swapClassNames(lefElement, rightElement) {
-    var thisClassName = $(lefElement).attr("class");
-    $(lefElement).attr("class", $(rightElement).attr("class"));
+function swapClassNames(leftElement, rightElement) {
+    var thisClassName = $(leftElement).attr("class");
+    $(leftElement).attr("class", $(rightElement).attr("class"));
     $(rightElement).attr("class", thisClassName);
 }
 
@@ -155,6 +155,22 @@ function generateRandomColor() {
 }
 
 var $gems = $(".gem");
+
+function enableGravity() {
+    var lookupTable = getGemsCoordinateLookupTable();
+
+    setInterval(function () {
+        $gems.each(function () {
+            var $gem = $(this);
+            var coordinates = getGemCoordinates($gem);
+            var $downGem = getGem(lookupTable, coordinates.row + 1, coordinates.col);
+
+            if (isDestroyedGem($downGem)) {
+                swapClassNames($gem, $downGem);
+            }
+        });
+    }, 50);
+}
 
 $gems.click(function () {
     var clickedGem = this;
