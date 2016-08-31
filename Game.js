@@ -129,19 +129,20 @@ function destroyGems(gems) {
     }
 }
 
-function destroyGemsWithPattern(lookupTable, matching, rowOffsets, colOffsets, name) {
+function getGemsToBeDestroyedWithPattern(lookupTable, rowOffsets, colOffsets, name) {
+    var gemsToBeDestroyed = [];
+
     for (var row = 0; row < lookupTable.length; row++) {
         for (var col = 0; col < lookupTable[row].length; col++) {
             var gems = getGemsWithPattern(lookupTable, row, col, rowOffsets, colOffsets);
 
             if (allGemsHaveSameClass(gems, name)) {
-                matching = true;
-                destroyGems(gems);
+                gemsToBeDestroyed.push(gems);
             }
         }
     }
 
-    return matching;
+    return gemsToBeDestroyed;
 }
 
 function generateRandomColor() {
@@ -169,30 +170,21 @@ $gems.click(function () {
 
                 var lookupTable = getGemsCoordinateLookupTable();
 
-                var matching = false;
+                var gemsToBeDestroyedByCol = getGemsToBeDestroyedWithPattern(lookupTable, [0, 1, 2], [0, 0, 0], "3 in column");
+                var gemsToBeDestroyedByRow = getGemsToBeDestroyedWithPattern(lookupTable, [0, 0, 0], [0, 1, 2], "3 in row");
 
-                matching = destroyGemsWithPattern(lookupTable, matching, [0, 1, 2, 2, 2], [0, 0, 0, 1, 2], "L shape");
-                matching = destroyGemsWithPattern(lookupTable, matching, [0, 1, 2, 0, 0], [0, 0, 0, 1, 2], "L shape 90deg clockwise");
-                matching = destroyGemsWithPattern(lookupTable, matching, [0, 1, 2, 2, 2], [2, 2, 0, 1, 2], "L shape 90deg counter-clockwise");
-                matching = destroyGemsWithPattern(lookupTable, matching, [0, 0, 0, 1, 2], [0, 1, 2, 2, 2], "L shape 180deg");
-
-                matching = destroyGemsWithPattern(lookupTable, matching, [0, 1, 2, 3, 4], [0, 0, 0, 0, 0], "5 in column");
-                matching = destroyGemsWithPattern(lookupTable, matching, [0, 0, 0, 0, 0], [0, 1, 2, 3, 4], "5 in row");
-
-                matching = destroyGemsWithPattern(lookupTable, matching, [0, 1, 2, 3], [0, 0, 0, 0], "4 in column");
-                matching = destroyGemsWithPattern(lookupTable, matching, [0, 0, 0, 0], [0, 1, 2, 3], "4 in row");
-
-                matching = destroyGemsWithPattern(lookupTable, matching, [0, 0, 0, 1, 2], [0, 1, 2, 1, 1], "T shape");
-                matching = destroyGemsWithPattern(lookupTable, matching, [1, 1, 1, 0, 2], [0, 1, 2, 2, 2], "T shape 90deg clockwise");
-                matching = destroyGemsWithPattern(lookupTable, matching, [0, 1, 2, 1, 1], [0, 0, 0, 1, 2], "T shape 90deg counter-clockwise");
-                matching = destroyGemsWithPattern(lookupTable, matching, [0, 1, 2, 2, 2], [1, 1, 1, 0, 2], "T shape 90deg counter-clockwise");
-
-
-                matching = destroyGemsWithPattern(lookupTable, matching, [0, 1, 2], [0, 0, 0], "3 in column");
-                matching = destroyGemsWithPattern(lookupTable, matching, [0, 0, 0], [0, 1, 2], "3 in row");
-
-                if (!matching) {
+                if (gemsToBeDestroyedByCol.length === 0 && gemsToBeDestroyedByRow.length === 0) {
                     swapClassNames(clickedGem, selectedGemBeforeSwap);
+                }
+
+                var index;
+
+                for (index = 0; index < gemsToBeDestroyedByCol.length; index++) {
+                    destroyGems(gemsToBeDestroyedByCol[index]);
+                }
+
+                for (index = 0; index < gemsToBeDestroyedByRow.length; index++) {
+                    destroyGems(gemsToBeDestroyedByRow[index]);
                 }
 
             } else {
