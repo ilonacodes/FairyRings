@@ -137,28 +137,35 @@
         setGemColor(1, 2, "green");
         setGemColor(2, 1, "green");
         setGemColor(3, 1, "green");
+        setGemColor(1, 1, "red");
+
+        step(swapGems(0, 1, 1, 1));
 
         setGemColor(1, 4, "red");
         setGemColor(1, 5, "red");
         setGemColor(0, 6, "red");
         setGemColor(2, 6, "red");
         setGemColor(1, 7, "red");
+        setGemColor(1, 6, "green");
+
+        step(swapGems(1, 7, 1, 6));
 
         setGemColor(6, 0, "yellow");
         setGemColor(5, 1, "yellow");
         setGemColor(7, 1, "yellow");
         setGemColor(6, 2, "yellow");
         setGemColor(6, 3, "yellow");
+        setGemColor(6, 1, "red");
+
+        step(swapGems(6, 0, 6, 1));
 
         setGemColor(5, 7, "blue");
         setGemColor(6, 7, "blue");
         setGemColor(7, 6, "blue");
         setGemColor(7, 8, "blue");
         setGemColor(8, 7, "blue");
+        setGemColor(7, 7, "red");
 
-        step(swapGems(0, 1, 1, 1));
-        step(swapGems(1, 7, 1, 6));
-        step(swapGems(6, 0, 6, 1));
         step(swapGems(8, 7, 7, 7));
     }
 
