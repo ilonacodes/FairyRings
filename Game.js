@@ -100,7 +100,7 @@ function thereIsNoGem(gem) {
 }
 
 function isDestroyedGem(gem) {
-    return gem.hasClass("gem-destroyed");
+    return $(gem).hasClass("gem-destroyed");
 }
 
 function allGemsHaveSameClass(gems, name) {
@@ -192,6 +192,18 @@ function foundGemsAndDestroy() {
     return foundGems;
 }
 
+function tryToMakePlayerTurn(clickedGem) {
+    var selectedGemBeforeSwap = selectedGem;
+
+    swapGemWithSelected(clickedGem);
+
+    var foundGems = foundGemsAndDestroy();
+
+    if (foundGems.length === 0) {
+        cancelPlayerTurn(clickedGem, selectedGemBeforeSwap);
+    }
+}
+
 $gems.click(function () {
     var clickedGem = this;
 
@@ -199,17 +211,8 @@ $gems.click(function () {
         deselectGem(clickedGem);
     } else {
         if (someGemIsSelected()) {
-            if (areNeighbours(clickedGem, selectedGem)) {
-                var selectedGemBeforeSwap = selectedGem;
-
-                swapGemWithSelected(clickedGem);
-
-                var foundGems = foundGemsAndDestroy();
-
-                if (foundGems.length === 0) {
-                    cancelPlayerTurn(clickedGem, selectedGemBeforeSwap);
-                }
-
+            if (areNeighbours(clickedGem, selectedGem) && !isDestroyedGem(selectedGem) && !isDestroyedGem(clickedGem)) {
+                tryToMakePlayerTurn(clickedGem);
             } else {
                 deselectGem(selectedGem);
             }
