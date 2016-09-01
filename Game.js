@@ -169,7 +169,27 @@ function enableGravity() {
                 swapClassNames($gem, $downGem);
             }
         });
+
+        foundGemsAndDestroy();
     }, 50);
+}
+
+function cancelPlayerTurn(clickedGem, selectedGemBeforeSwap) {
+    swapClassNames(clickedGem, selectedGemBeforeSwap);
+}
+
+function foundGemsAndDestroy() {
+    var lookupTable = getGemsCoordinateLookupTable();
+
+    var gemsToBeDestroyedByCol = getGemsToBeDestroyedWithPattern(lookupTable, [0, 1, 2], [0, 0, 0], "3 in column");
+    var gemsToBeDestroyedByRow = getGemsToBeDestroyedWithPattern(lookupTable, [0, 0, 0], [0, 1, 2], "3 in row");
+
+    var foundGems = gemsToBeDestroyedByCol.concat(gemsToBeDestroyedByRow);
+
+    for (var index = 0; index < foundGems.length; index++) {
+        destroyGems(foundGems[index]);
+    }
+    return foundGems;
 }
 
 $gems.click(function () {
@@ -184,23 +204,10 @@ $gems.click(function () {
 
                 swapGemWithSelected(clickedGem);
 
-                var lookupTable = getGemsCoordinateLookupTable();
+                var foundGems = foundGemsAndDestroy();
 
-                var gemsToBeDestroyedByCol = getGemsToBeDestroyedWithPattern(lookupTable, [0, 1, 2], [0, 0, 0], "3 in column");
-                var gemsToBeDestroyedByRow = getGemsToBeDestroyedWithPattern(lookupTable, [0, 0, 0], [0, 1, 2], "3 in row");
-
-                if (gemsToBeDestroyedByCol.length === 0 && gemsToBeDestroyedByRow.length === 0) {
-                    swapClassNames(clickedGem, selectedGemBeforeSwap);
-                }
-
-                var index;
-
-                for (index = 0; index < gemsToBeDestroyedByCol.length; index++) {
-                    destroyGems(gemsToBeDestroyedByCol[index]);
-                }
-
-                for (index = 0; index < gemsToBeDestroyedByRow.length; index++) {
-                    destroyGems(gemsToBeDestroyedByRow[index]);
+                if (foundGems.length === 0) {
+                    cancelPlayerTurn(clickedGem, selectedGemBeforeSwap);
                 }
 
             } else {
