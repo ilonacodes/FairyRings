@@ -165,7 +165,7 @@ function enableGravity() {
             var coordinates = getGemCoordinates($gem);
             var $downGem = getGem(lookupTable, coordinates.row + 1, coordinates.col);
 
-            if (isDestroyedGem($downGem)) {
+            if (isDestroyedGem($downGem) && !isDestroyedGem($gem)) {
                 swapClassNames($gem, $downGem);
             }
         });
