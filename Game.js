@@ -209,16 +209,15 @@ $gems.click(function () {
 
     if (isSelected(clickedGem)) {
         deselectGem(clickedGem);
-    } else {
-        if (someGemIsSelected()) {
-            if (areNeighbours(clickedGem, selectedGem) && !isDestroyedGem(selectedGem) && !isDestroyedGem(clickedGem)) {
-                tryToMakePlayerTurn(clickedGem);
-            } else {
-                deselectGem(selectedGem);
-            }
 
+    } else if (someGemIsSelected()) {
+        if (areNeighbours(clickedGem, selectedGem) && !isDestroyedGem(selectedGem) && !isDestroyedGem(clickedGem)) {
+            tryToMakePlayerTurn(clickedGem);
         } else {
-            selectGem(clickedGem);
+            deselectGem(selectedGem);
         }
+
+    } else if (!isDestroyedGem(clickedGem)) {
+        selectGem(clickedGem);
     }
 });
