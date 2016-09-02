@@ -170,7 +170,7 @@ function enableGravity() {
             }
         });
 
-        foundGemsAndDestroy();
+        findGemsAndDestroy();
     }, 50);
 }
 
@@ -178,7 +178,7 @@ function cancelPlayerTurn(clickedGem, selectedGemBeforeSwap) {
     swapClassNames(clickedGem, selectedGemBeforeSwap);
 }
 
-function foundGemsAndDestroy() {
+function findGemsAndDestroy() {
     var lookupTable = getGemsCoordinateLookupTable();
 
     var gemsToBeDestroyedByCol = getGemsToBeDestroyedWithPattern(lookupTable, [0, 1, 2], [0, 0, 0], "3 in column");
@@ -189,6 +189,13 @@ function foundGemsAndDestroy() {
     for (var index = 0; index < foundGems.length; index++) {
         destroyGems(foundGems[index]);
     }
+
+    $(".gem-destroyed").each(function () {
+        if (getGemCoordinates($(this)).row === 0) {
+            $(this).attr("class", "gem gem-" + generateRandomColor());
+        }
+    });
+    
     return foundGems;
 }
 
@@ -197,7 +204,7 @@ function tryToMakePlayerTurn(clickedGem) {
 
     swapGemWithSelected(clickedGem);
 
-    var foundGems = foundGemsAndDestroy();
+    var foundGems = findGemsAndDestroy();
 
     if (foundGems.length === 0) {
         cancelPlayerTurn(clickedGem, selectedGemBeforeSwap);
