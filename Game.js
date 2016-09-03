@@ -1,5 +1,6 @@
 const NEIGHBOUR_DISTANCE = 1;
 var selectedGem = null;
+var score = 0;
 
 function swapClassNames(leftElement, rightElement) {
     var thisClassName = $(leftElement).attr("class");
@@ -137,7 +138,9 @@ function getGemsToBeDestroyedWithPattern(lookupTable, rowOffsets, colOffsets, na
             var gems = getGemsWithPattern(lookupTable, row, col, rowOffsets, colOffsets);
 
             if (allGemsHaveSameClass(gems, name)) {
-                gemsToBeDestroyed.push(gems);
+                for (var index = 0; index < gems.length; index++) {
+                    gemsToBeDestroyed.push(gems[index]);
+                }
             }
         }
     }
@@ -186,15 +189,16 @@ function findGemsAndDestroy() {
 
     var foundGems = gemsToBeDestroyedByCol.concat(gemsToBeDestroyedByRow);
 
-    for (var index = 0; index < foundGems.length; index++) {
-        destroyGems(foundGems[index]);
-    }
+    destroyGems(foundGems);
 
     $(".gem-destroyed").each(function () {
         if (getGemCoordinates($(this)).row === 0) {
             $(this).attr("class", "gem gem-" + generateRandomColor());
         }
     });
+
+    score = score + foundGems.length;
+    console.log(score);
     
     return foundGems;
 }
