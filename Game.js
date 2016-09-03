@@ -151,9 +151,12 @@ function getGemsToBeDestroyedWithPattern(lookupTable, rowOffsets, colOffsets, na
 function generateRandomColor() {
     var randomValue = Math.random();
 
-    if (randomValue < 0.25) return "red";
-    if (randomValue < 0.50) return "green";
-    if (randomValue < 0.75) return "yellow";
+    if (randomValue < 0.17) return "red";
+    if (randomValue < 0.34) return "green";
+    if (randomValue < 0.5) return "yellow";
+    if (randomValue < 0.67) return "violet";
+    if (randomValue < 0.84) return "silver";
+
     return "blue";
 }
 
@@ -197,8 +200,20 @@ function findGemsAndDestroy() {
         }
     });
 
-    score = score + foundGems.length;
-    console.log(score);
+    var memo = [];
+
+    for (var index = 0; index < foundGems.length; index++) {
+        var gem = foundGems[index];
+        var coordinates = gem.attr("coordinates");
+
+        if (memo.indexOf(coordinates) === -1) {
+            score++;
+            memo.push(coordinates);
+        }
+    }
+
+    $("div.score").text("SCORE: " + score);
+    console.log("SCORE: " + score);
     
     return foundGems;
 }

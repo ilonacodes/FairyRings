@@ -22,6 +22,15 @@
     background-color: blue;
 }
 
+.gem.gem-violet {
+    background-color: violet;
+}
+
+.gem.gem-silver {
+    background-color: silver;
+}
+
+
 .gem.gem-destroyed {
     background-color: white;
 }
