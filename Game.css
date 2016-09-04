@@ -41,10 +41,28 @@
     border-style: solid;
 }
 
+.game-over .game-field {
+    opacity: 0.2;
+}
+
 .selected {
-    border-color: black;
-    border-width: 2px;
-    border-style: solid;
+    border: 2px solid black;
     width: 26px;
     height: 26px;
+}
+
+.game-over-text {
+    display: none;
+}
+
+.game-over .game-over-text {
+    position: absolute;
+    top: 10px;
+    left: 8px;
+    font-size: 99px;
+    width: 310px;
+    padding: 40px 0;
+    font-weight: bold;
+    z-index: 1000;
+    display: block;
 }

@@ -1,6 +1,7 @@
 const NEIGHBOUR_DISTANCE = 1;
 var selectedGem = null;
 var score = 0;
+var gameIsGoing = true;
 
 function swapClassNames(leftElement, rightElement) {
     var thisClassName = $(leftElement).attr("class");
@@ -214,7 +215,7 @@ function findGemsAndDestroy() {
 
     $("div.score").text("SCORE: " + score);
     console.log("SCORE: " + score);
-    
+
     return foundGems;
 }
 
@@ -233,17 +234,53 @@ function tryToMakePlayerTurn(clickedGem) {
 $gems.click(function () {
     var clickedGem = this;
 
-    if (isSelected(clickedGem)) {
-        deselectGem(clickedGem);
+    if (gameIsGoing) {
+        if (isSelected(clickedGem)) {
+            deselectGem(clickedGem);
 
-    } else if (someGemIsSelected()) {
-        if (areNeighbours(clickedGem, selectedGem) && !isDestroyedGem(selectedGem) && !isDestroyedGem(clickedGem)) {
-            tryToMakePlayerTurn(clickedGem);
-        } else {
-            deselectGem(selectedGem);
+        } else if (someGemIsSelected()) {
+            if (areNeighbours(clickedGem, selectedGem) && !isDestroyedGem(selectedGem) && !isDestroyedGem(clickedGem)) {
+                tryToMakePlayerTurn(clickedGem);
+            } else {
+                deselectGem(selectedGem);
+            }
+
+        } else if (!isDestroyedGem(clickedGem)) {
+            selectGem(clickedGem);
         }
+    } else {
 
-    } else if (!isDestroyedGem(clickedGem)) {
-        selectGem(clickedGem);
     }
 });
+
+var timeLeft = 60;
+
+function gameOver() {
+    gameIsGoing = false;
+    $("body").addClass("game-over");
+    console.log("Game Over");
+}
+
+setInterval(function () {
+    timeLeft--;
+
+    var date = new Date(null);
+    date.setSeconds(timeLeft);
+    var timeLeftString = date.toLocaleTimeString([], {
+        hours: null,
+        minutes: "numeric",
+        seconds: "numeric",
+        hour12: false
+    });
+    var timeSeconds = timeLeftString.substr(timeLeftString.length - 5);
+
+    if (timeLeft < 0) {
+        gameOver();
+    } else {
+
+        $("div.timer").text("TIMER: " + timeSeconds);
+        console.log("TIMER: " + timeSeconds);
+
+    }
+
+}, 1000);
