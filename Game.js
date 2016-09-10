@@ -3,6 +3,13 @@ var selectedGem = null;
 var score = 0;
 var gameIsGoing = true;
 
+function forEachGem(query, action) {
+    $(query).each(function () {
+        var $gem = $(this);
+        action($gem);
+    });
+}
+
 function swapClassNames(leftElement, rightElement) {
     var thisClassName = $(leftElement).attr("class");
     $(leftElement).attr("class", $(rightElement).attr("class"));
@@ -71,9 +78,10 @@ function putGemIntoTable(table, gem) {
 function getGemsCoordinateLookupTable() {
     var table = [];
 
-    $(".gem").each(function () {
-        putGemIntoTable(table, $(this));
+    forEachGem(".gem", function ($gem) {
+        putGemIntoTable(table, $gem);
     });
+
     return table;
 }
 
@@ -105,10 +113,15 @@ function isDestroyedGem(gem) {
     return $(gem).hasClass("gem-destroyed");
 }
 
+function isAlreadyDestroying(gem) {
+    return $(gem).hasClass("gem-ready-to-be-destroyed") ||
+        $(gem).hasClass("gem-destroying");
+}
+
 function allGemsHaveSameClass(gems, name) {
     var firstGem = gems[0];
 
-    if (thereIsNoGem(firstGem) || isDestroyedGem(firstGem)) {
+    if (thereIsNoGem(firstGem) || isDestroyedGem(firstGem) || isAlreadyDestroying(firstGem)) {
         return false;
     }
 
@@ -121,13 +134,13 @@ function allGemsHaveSameClass(gems, name) {
     return true;
 }
 
-function destroyGem(gem) {
-    gem.addClass("gem-destroyed");
+function markGemAsReadyToBeDestroyed(gem) {
+    gem.addClass("gem-ready-to-be-destroyed");
 }
 
 function destroyGems(gems) {
     for (var index = 0; index < gems.length; index++) {
-        destroyGem(gems[index]);
+        markGemAsReadyToBeDestroyed(gems[index]);
     }
 }
 
@@ -149,16 +162,12 @@ function getGemsToBeDestroyedWithPattern(lookupTable, rowOffsets, colOffsets, na
     return gemsToBeDestroyed;
 }
 
+var colors = ["red", "green", "yellow", "violet", "blue"];
+
 function generateRandomColor() {
     var randomValue = Math.random();
 
-    if (randomValue < 0.17) return "red";
-    if (randomValue < 0.34) return "green";
-    if (randomValue < 0.5) return "yellow";
-    if (randomValue < 0.67) return "violet";
-    if (randomValue < 0.84) return "silver";
-
-    return "blue";
+    return colors[Math.floor(5 * randomValue)];
 }
 
 var $gems = $(".gem");
@@ -167,13 +176,33 @@ function enableGravity() {
     var lookupTable = getGemsCoordinateLookupTable();
 
     setInterval(function () {
-        $gems.each(function () {
-            var $gem = $(this);
+        forEachGem(".gem", function ($gem) {
             var coordinates = getGemCoordinates($gem);
             var $downGem = getGem(lookupTable, coordinates.row + 1, coordinates.col);
 
             if (isDestroyedGem($downGem) && !isDestroyedGem($gem)) {
-                swapClassNames($gem, $downGem);
+                $gem.addClass("gem-falling");
+            } else {
+                $gem.removeClass("gem-fallen");
+            }
+        });
+
+        forEachGem(".gem-falling", function ($gem) {
+            var coordinates = getGemCoordinates($gem);
+            var $downGem = getGem(lookupTable, coordinates.row + 1, coordinates.col);
+
+            $gem.removeClass("gem-falling").addClass("gem-fallen");
+
+            swapClassNames($gem, $downGem);
+            var $previousGem = $gem;
+            coordinates = getGemCoordinates($previousGem);
+            var $upGem = getGem(lookupTable, coordinates.row - 1, coordinates.col);
+
+            while ($upGem.hasClass("gem") && !isDestroyedGem($upGem)) {
+                swapClassNames($previousGem, $upGem);
+                $previousGem = $upGem;
+                coordinates = getGemCoordinates($previousGem);
+                $upGem = getGem(lookupTable, coordinates.row - 1, coordinates.col);
             }
         });
 
@@ -185,22 +214,15 @@ function cancelPlayerTurn(clickedGem, selectedGemBeforeSwap) {
     swapClassNames(clickedGem, selectedGemBeforeSwap);
 }
 
-function findGemsAndDestroy() {
-    var lookupTable = getGemsCoordinateLookupTable();
-
-    var gemsToBeDestroyedByCol = getGemsToBeDestroyedWithPattern(lookupTable, [0, 1, 2], [0, 0, 0], "3 in column");
-    var gemsToBeDestroyedByRow = getGemsToBeDestroyedWithPattern(lookupTable, [0, 0, 0], [0, 1, 2], "3 in row");
-
-    var foundGems = gemsToBeDestroyedByCol.concat(gemsToBeDestroyedByRow);
-
-    destroyGems(foundGems);
-
-    $(".gem-destroyed").each(function () {
-        if (getGemCoordinates($(this)).row === 0) {
-            $(this).attr("class", "gem gem-" + generateRandomColor());
+function generateNewRowOfGems() {
+    forEachGem(".gem-destroyed", function ($gem) {
+        if (getGemCoordinates($gem).row === 0) {
+            $gem.attr("class", "gem gem-" + generateRandomColor());
         }
     });
+}
 
+function updateScore(foundGems) {
     var memo = [];
 
     for (var index = 0; index < foundGems.length; index++) {
@@ -215,6 +237,19 @@ function findGemsAndDestroy() {
 
     $("div.score").text("SCORE: " + score);
     console.log("SCORE: " + score);
+}
+
+function findGemsAndDestroy() {
+    var lookupTable = getGemsCoordinateLookupTable();
+
+    var gemsToBeDestroyedByCol = getGemsToBeDestroyedWithPattern(lookupTable, [0, 1, 2], [0, 0, 0], "3 in column");
+    var gemsToBeDestroyedByRow = getGemsToBeDestroyedWithPattern(lookupTable, [0, 0, 0], [0, 1, 2], "3 in row");
+
+    var foundGems = gemsToBeDestroyedByCol.concat(gemsToBeDestroyedByRow);
+
+    destroyGems(foundGems);
+    generateNewRowOfGems();
+    updateScore(foundGems);
 
     return foundGems;
 }
@@ -234,22 +269,22 @@ function tryToMakePlayerTurn(clickedGem) {
 $gems.click(function () {
     var clickedGem = this;
 
-    if (gameIsGoing) {
-        if (isSelected(clickedGem)) {
-            deselectGem(clickedGem);
+    if (!gameIsGoing) {
+        return;
+    }
 
-        } else if (someGemIsSelected()) {
-            if (areNeighbours(clickedGem, selectedGem) && !isDestroyedGem(selectedGem) && !isDestroyedGem(clickedGem)) {
-                tryToMakePlayerTurn(clickedGem);
-            } else {
-                deselectGem(selectedGem);
-            }
+    if (isSelected(clickedGem)) {
+        deselectGem(clickedGem);
 
-        } else if (!isDestroyedGem(clickedGem)) {
-            selectGem(clickedGem);
+    } else if (someGemIsSelected()) {
+        if (areNeighbours(clickedGem, selectedGem) && !isDestroyedGem(selectedGem) && !isDestroyedGem(clickedGem)) {
+            tryToMakePlayerTurn(clickedGem);
+        } else {
+            deselectGem(selectedGem);
         }
-    } else {
 
+    } else if (!isDestroyedGem(clickedGem)) {
+        selectGem(clickedGem);
     }
 });
 
@@ -284,3 +319,13 @@ setInterval(function () {
     }
 
 }, 1000);
+
+setInterval(function () {
+    forEachGem(".gem-destroying", function ($gem) {
+        $gem.removeClass("gem-destroying").addClass("gem-destroyed");
+    });
+
+    forEachGem(".gem-ready-to-be-destroyed", function ($gem) {
+        $gem.removeClass("gem-ready-to-be-destroyed").addClass("gem-destroying");
+    });
+}, 200);

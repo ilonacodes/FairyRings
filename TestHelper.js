@@ -19,6 +19,6 @@ function swapGems(firstRow, firstCol, secondRow, secondCol) {
 
 var timeoutCounter = 0;
 function step(action) {
-    timeoutCounter += 333;
+    timeoutCounter += 500;
     setTimeout(action, timeoutCounter);
 }
