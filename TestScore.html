@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Game</title>
+
+    <link type="text/css" rel="stylesheet" href="Game.css">
+
+    <script src="./js/jquery-2.2.4.min.js"></script>
+
+</head>
+<body>
+
+<div class="game-field">
+    <span class="gem"></span>
+    <span class="gem"></span>
+    <span class="gem"></span>
+
+    <span class="gem"></span>
+    <span class="gem"></span>
+    <span class="gem"></span>
+
+    <span class="gem"></span>
+    <span class="gem"></span>
+    <span class="gem"></span>
+
+    <span class="gem"></span>
+    <span class="gem"></span>
+    <span class="gem"></span>
+
+    <span class="gem"></span>
+    <span class="gem"></span>
+    <span class="gem"></span>
+
+    <span class="gem"></span>
+    <span class="gem"></span>
+    <span class="gem"></span>
+
+    <span class="gem"></span>
+    <span class="gem"></span>
+    <span class="gem"></span>
+
+    <span class="gem"></span>
+    <span class="gem"></span>
+    <span class="gem"></span>
+
+    <span class="gem"></span>
+    <span class="gem"></span>
+    <span class="gem"></span>
+
+    <span class="gem"></span>
+    <span class="gem"></span>
+    <span class="gem"></span>
+
+    <span class="gem"></span>
+    <span class="gem"></span>
+    <span class="gem"></span>
+
+    <span class="gem"></span>
+    <span class="gem"></span>
+    <span class="gem"></span>
+
+    <span class="gem"></span>
+    <span class="gem"></span>
+    <span class="gem"></span>
+
+    <span class="gem"></span>
+    <span class="gem"></span>
+    <span class="gem"></span>
+
+    <span class="gem"></span>
+    <span class="gem"></span>
+    <span class="gem"></span>
+
+    <span class="gem"></span>
+    <span class="gem"></span>
+    <span class="gem"></span>
+
+    <span class="gem"></span>
+    <span class="gem"></span>
+    <span class="gem"></span>
+
+    <span class="gem"></span>
+    <span class="gem"></span>
+    <span class="gem"></span>
+
+    <span class="gem"></span>
+    <span class="gem"></span>
+    <span class="gem"></span>
+
+    <span class="gem"></span>
+    <span class="gem"></span>
+    <span class="gem"></span>
+
+    <span class="gem"></span>
+    <span class="gem"></span>
+    <span class="gem"></span>
+
+    <span class="gem"></span>
+    <span class="gem"></span>
+    <span class="gem"></span>
+
+    <span class="gem"></span>
+    <span class="gem"></span>
+    <span class="gem"></span>
+
+    <span class="gem"></span>
+    <span class="gem"></span>
+    <span class="gem"></span>
+
+    <span class="gem"></span>
+    <span class="gem"></span>
+    <span class="gem"></span>
+
+    <span class="gem"></span>
+    <span class="gem"></span>
+    <span class="gem"></span>
+
+    <span class="gem"></span>
+    <span class="gem"></span>
+    <span class="gem"></span>
+</div>
+
+<div class="score">SCORE: 0</div>
+
+<div class="timer">TIMER: 00:00</div>
+
+<div class="actions">
+    <a href="./MainMenu.html">Main Menu</a>
+</div>
+
+<script src="Game.js"></script>
+<script src="TestHelper.js"></script>
+
+<script>
+    function test() {
+
+        destroyAllGems();
+
+        setGemColor(1, 5, "red");
+        setGemColor(2, 5, "red");
+        setGemColor(3, 5, "green");
+        setGemColor(4, 5, "red");
+
+        step(swapGems(4, 5, 3, 5));
+    }
+
+    test();
+</script>
+</body>
+</html>
