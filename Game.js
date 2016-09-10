@@ -239,6 +239,12 @@ function updateScore(foundGems) {
     console.log("SCORE: " + score);
 }
 
+function addTimeBonuses(foundGems) {
+    if (foundGems.length > 3) {
+        timeLeft += 3;
+    }
+}
+
 function findGemsAndDestroy() {
     var lookupTable = getGemsCoordinateLookupTable();
 
@@ -250,6 +256,7 @@ function findGemsAndDestroy() {
     destroyGems(foundGems);
     generateNewRowOfGems();
     updateScore(foundGems);
+    addTimeBonuses(foundGems);
 
     return foundGems;
 }
@@ -296,6 +303,15 @@ function gameOver() {
     console.log("Game Over");
 }
 
+function updateTimer(timeSeconds) {
+    $(".timer").text("TIMER: " + timeSeconds);
+    console.log("TIMER: " + timeSeconds);
+
+    if (timeLeft < 10) {
+        $(".timer").addClass("timer-danger");
+    }
+}
+
 setInterval(function () {
     timeLeft--;
 
@@ -312,10 +328,7 @@ setInterval(function () {
     if (timeLeft < 0) {
         gameOver();
     } else {
-
-        $("div.timer").text("TIMER: " + timeSeconds);
-        console.log("TIMER: " + timeSeconds);
-
+        updateTimer(timeSeconds);
     }
 
 }, 1000);
