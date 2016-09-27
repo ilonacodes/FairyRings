@@ -1,7 +1,9 @@
 const NEIGHBOUR_DISTANCE = 1;
 var selectedGem = null;
 var score = 0;
+var highScore = parseFloat(localStorage.highScore);
 var gameIsGoing = true;
+var timeLeft = 60;
 
 function forEachGem(query, action) {
     $(query).each(function () {
@@ -236,7 +238,6 @@ function updateScore(foundGems) {
     }
 
     $("div.score").text("SCORE: " + score);
-    console.log("SCORE: " + score);
 }
 
 function addTimeBonuses(foundGems) {
@@ -295,8 +296,6 @@ $gems.click(function () {
     }
 });
 
-var timeLeft = 60;
-
 function gameOver() {
     gameIsGoing = false;
     $("body").addClass("game-over");
@@ -305,7 +304,6 @@ function gameOver() {
 
 function updateTimer(timeSeconds) {
     $(".timer").text("TIMER: " + timeSeconds);
-    console.log("TIMER: " + timeSeconds);
 
     if (timeLeft < 10) {
         $(".timer").addClass("timer-danger");
@@ -342,3 +340,15 @@ setInterval(function () {
         $gem.removeClass("gem-ready-to-be-destroyed").addClass("gem-destroying");
     });
 }, 200);
+
+function updateHighScore() {
+    if (score > highScore) {
+        highScore = score;
+        localStorage.highScore = highScore;
+    }
+
+    $(".high-score").text("HIGHSCORE: " + highScore);
+}
+
+setInterval(updateHighScore, 500);
+updateHighScore();
