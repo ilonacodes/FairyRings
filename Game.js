@@ -6,6 +6,9 @@ var highScore = highScoreStore.load();
 var gameIsGoing = true;
 var timeLeft = 60;
 
+var $gems = $(".gem");
+var $timer = $(".timer");
+
 function forEachGem(query, action) {
     $(query).each(function () {
         var $gem = $(this);
@@ -173,8 +176,6 @@ function generateRandomColor() {
     return colors[Math.floor(5 * randomValue)];
 }
 
-var $gems = $(".gem");
-
 function enableGravity() {
     var lookupTable = getGemsCoordinateLookupTable();
 
@@ -304,10 +305,10 @@ function gameOver() {
 }
 
 function updateTimer(timeSeconds) {
-    $(".timer").text("TIMER: " + timeSeconds);
+    $timer.text("TIMER: " + timeSeconds);
 
     if (timeLeft < 10) {
-        $(".timer").addClass("timer-danger");
+        $timer.addClass("timer-danger");
     }
 }
 
