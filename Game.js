@@ -1,7 +1,8 @@
 const NEIGHBOUR_DISTANCE = 1;
 var selectedGem = null;
 var score = 0;
-var highScore = parseFloat(localStorage.highScore);
+var highScoreStore = new HighScoreStore();
+var highScore = highScoreStore.load();
 var gameIsGoing = true;
 var timeLeft = 60;
 
@@ -344,7 +345,7 @@ setInterval(function () {
 function updateHighScore() {
     if (score > highScore) {
         highScore = score;
-        localStorage.highScore = highScore;
+        highScoreStore.save(highScore);
     }
 
     $(".high-score").text("HIGHSCORE: " + highScore);

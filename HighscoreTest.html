@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HighScore Test</title>
+    <script src="./js/jquery-2.2.4.min.js"></script>
+</head>
+<body>
+
+<div class="results"></div>
+
+<script src="HighScore.js"></script>
+<script src="Game.js"></script>
+
+<script>
+    var highScoreStore, highScore;
+
+    function givenDatabaseDoesNotHaveHighScoreSaved() {
+        localStorage.removeItem("highScore");
+    }
+
+    function whenILoadHighScore() {
+        highScoreStore = new HighScoreStore();
+        highScore = highScoreStore.load();
+    }
+
+    function whenISaveNewHighScore(newHighScore) {
+        highScoreStore.save(newHighScore);
+    }
+
+    function thenIGet(expected) {
+        if (highScore === expected) {
+            $(".results").append("OK<br/>");
+        } else {
+            $(".results").append("expected " + expected + ", got " + highScore + "<br/>");
+        }
+    }
+
+    givenDatabaseDoesNotHaveHighScoreSaved();
+    whenILoadHighScore();
+    thenIGet(0);
+
+    whenISaveNewHighScore(25);
+    whenILoadHighScore();
+    thenIGet(25);
+</script>
+</body>
+</html>
