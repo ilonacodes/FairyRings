@@ -4,6 +4,7 @@
     width: 30px;
     border-radius: 10px;
     display: inline-block;
+    margin: 0 2px;
 }
 
 .gem.gem-red {
@@ -27,13 +28,13 @@
 }
 
 @-webkit-keyframes gem-destroying {
-    from { width: 30px; height: 30px; margin: 0; }
-    to { width: 0; height: 0; margin: 15px; }
+    from { width: 30px; height: 30px; margin: 0 2px; }
+    to { width: 0; height: 0; margin: 13px 17px; }
 }
 
 @keyframes gem-destroying {
-    from { width: 30px; height: 30px; margin: 0; }
-    to { width: 0; height: 0; margin: 15px; }
+    from { width: 30px; height: 30px; margin: 0 2px; }
+    to { width: 0; height: 0; margin: 13px 17px; }
 }
 
 .gem.gem-destroying {
@@ -47,8 +48,9 @@
 }
 
 .game-field {
-    height: 302px;
-    width: 302px;
+    padding-top: 2px;
+    height: auto;
+    width: 307px;
     border-style: solid;
 }
 

@@ -6,6 +6,20 @@ var highScore = highScoreStore.load();
 var gameIsGoing = true;
 var timeLeft = 60;
 
+for (var row = 0; row < 9; row++) {
+    var $row = $("<div>").addClass("game-field-row");
+
+    for (var col = 0; col < 9; col++) {
+        var $gem = $("<span>").addClass("gem").attr("coordinates", JSON.stringify({
+            row: row,
+            col: col
+        }));
+        $row.append($gem);
+    }
+
+    $(".game-field").append($row);
+}
+
 var $gems = $(".gem");
 var $timer = $(".timer");
 
@@ -46,10 +60,7 @@ function selectGem(gem) {
 }
 
 function getGemCoordinates(gem) {
-    return {
-        col: ($(gem).offset().left - 11) / 34,
-        row: ($(gem).offset().top - 11) / 34
-    };
+    return JSON.parse($(gem).attr("coordinates"));
 }
 
 function columnDistance(coordinates, otherCoordinates) {
@@ -77,10 +88,9 @@ function putGemIntoTableByCoordinates(table, row, col, gem) {
 
 function putGemIntoTable(table, gem) {
     var coordinates = getGemCoordinates(gem);
-
-    $(gem).attr("coordinates", JSON.stringify(coordinates));
     putGemIntoTableByCoordinates(table, coordinates.row, coordinates.col, gem);
 }
+
 function getGemsCoordinateLookupTable() {
     var table = [];
 
@@ -301,7 +311,6 @@ $gems.click(function () {
 function gameOver() {
     gameIsGoing = false;
     $("body").addClass("game-over");
-    console.log("Game Over");
 }
 
 function updateTimer(timeSeconds) {
