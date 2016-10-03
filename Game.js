@@ -5,6 +5,7 @@ var highScoreStore = new HighScoreStore();
 var highScore = highScoreStore.load();
 var gameIsGoing = true;
 var timeLeft = 60;
+var timerPresenter = new TimerPresenter();
 
 for (var row = 0; row < 9; row++) {
     var $row = $("<div>").addClass("game-field-row");
@@ -313,8 +314,8 @@ function gameOver() {
     $("body").addClass("game-over");
 }
 
-function updateTimer(timeSeconds) {
-    $timer.text("TIMER: " + timeSeconds);
+function updateTimer(timeLeftPresentation) {
+    $timer.text("TIMER: " + timeLeftPresentation);
 
     if (timeLeft < 10) {
         $timer.addClass("timer-danger");
@@ -324,20 +325,10 @@ function updateTimer(timeSeconds) {
 setInterval(function () {
     timeLeft--;
 
-    var date = new Date(null);
-    date.setSeconds(timeLeft);
-    var timeLeftString = date.toLocaleTimeString([], {
-        hours: null,
-        minutes: "numeric",
-        seconds: "numeric",
-        hour12: false
-    });
-    var timeSeconds = timeLeftString.substr(timeLeftString.length - 5);
-
     if (timeLeft < 0) {
         gameOver();
     } else {
-        updateTimer(timeSeconds);
+        updateTimer(timerPresenter.presentTimer(timeLeft));
     }
 
 }, 1000);

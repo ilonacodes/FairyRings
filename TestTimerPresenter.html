@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Timer Presenter</title>
+</head>
+<body>
+
+<div class="results"></div>
+
+<script src="./js/jquery-2.2.4.min.js"></script>
+<script src="TimerPresenter.js"></script>
+
+<script>
+    var seconds, timerPresenter, presentedTimer;
+
+    function givenSecondsIs(givenSeconds) {
+        seconds = givenSeconds;
+    }
+
+    function whenPresentingTimer() {
+        timerPresenter = new TimerPresenter();
+        presentedTimer = timerPresenter.presentTimer(seconds);
+    }
+
+    function thenPresentedTimerIs(expected) {
+        if (presentedTimer === expected) {
+            $(".results").append("OK<br/>");
+        } else {
+            $(".results").append("expected " + expected + ", got " + presentedTimer + "<br/>");
+        }
+    }
+
+    givenSecondsIs(59);
+    whenPresentingTimer();
+    thenPresentedTimerIs("00:59");
+
+    givenSecondsIs(42);
+    whenPresentingTimer();
+    thenPresentedTimerIs("00:42");
+
+
+    givenSecondsIs(0);
+    whenPresentingTimer();
+    thenPresentedTimerIs("00:00");
+
+    givenSecondsIs(7);
+    whenPresentingTimer();
+    thenPresentedTimerIs("00:07");
+
+    givenSecondsIs(74);
+    whenPresentingTimer();
+    thenPresentedTimerIs("01:14");
+
+    givenSecondsIs(135);
+    whenPresentingTimer();
+    thenPresentedTimerIs("02:15");
+
+    givenSecondsIs(1051);
+    whenPresentingTimer();
+    thenPresentedTimerIs("17:31");
+
+</script>
+
+</body>
+</html>
